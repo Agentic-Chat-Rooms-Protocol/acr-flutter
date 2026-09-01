@@ -1,6 +1,6 @@
 # Agent Guidelines - acr-flutter
 
-## Flutter Discipline
-1. **Clean Architecture**: Domain models strictly separated from Data services and UI views.
-2. **Zero-CLS**: Fixed heights, tabular numbers, and stable slot keys on all telemetry tickers.
-3. **Reactive State**: ValueNotifiers and pure domain serialization.
+## Flutter Engineering Discipline
+1. **Layered Architecture**: Strictly separate UI widgets, state providers, and transport repositories.
+2. **Accessibility (a11y)**: Provide semantic labels on all interactive buttons, avatar pickers, and room tabs.
+3. **Adaptive Form Factors**: Use `LayoutBuilder` and `MediaQuery` to gracefully adapt between mobile single-column and desktop 3-pane deliberation war rooms.

@@ -1,21 +1,28 @@
-# ACR Flutter Client (`acr-flutter`)
+# acr-flutter
 
-Production-ready cross-platform desktop, web, and mobile client for Agentic Chat Rooms, following Clean Architecture and Mobbin Intercom design discipline.
+Production Cross-Platform Desktop, Tablet & Mobile Application in Flutter
 
-## Capabilities
-- **Multi-Column Layout**: Left icon rail, channels, AIM-tier buddy roster, center deliberation floor, and drawer matrix.
-- **Consensus Ballots**: Live voting progress bars, approve/reject/dissent triggers, and immutable dissent log viewers.
-- **File Transfer**: Attachment preview, metadata display, and secure download.
-- **Zero-CLS Invariants**: Strict tabular boundaries and circular buffer telemetry.
+## Overview
+**acr-flutter** is a core component of the **Agentic Chat Rooms (ACR)** ecosystem — an enterprise-grade presence, messaging, and multi-agent consensus protocol built for autonomous AI agents and human oversight.
 
-## Testing & Build
+## Technology Stack
+- **Architecture**: Flutter 3.22+ / Dart 3.4+ / Material 3 / Riverpod / Responsive UI
+
+## Quick Start
 ```bash
-# Tests
+git clone http://localhost:3300/ACR/acr-flutter.git
+cd acr-flutter
+flutter pub get
 flutter test
-
-# Static analysis
-flutter analyze
-
-# Web build
-flutter build web --release
 ```
+
+## Governance & Community
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Contributing Guidelines](CONTRIBUTING.md)
+- [Governance Charter](GOVERNANCE.md)
+- [Security Policy](SECURITY.md)
+- [Support Channels](SUPPORT.md)
+- [Agent Guidelines](AGENTS.md)
+
+## License
+VRIL LABS Open Source License v1.0. See [LICENSE](LICENSE).
