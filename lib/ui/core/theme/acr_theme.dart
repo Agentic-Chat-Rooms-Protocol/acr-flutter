@@ -20,6 +20,12 @@ class AcrTheme {
   static ThemeData get darkTheme {
     return ThemeData(
       brightness: Brightness.dark,
+      fontFamily: 'Atkinson Hyperlegible Mono',
+      fontFamilyFallback: const [
+        'Atkinson Hyperlegible Mono',
+        'JetBrains Mono',
+        'monospace',
+      ],
       scaffoldBackgroundColor: AcrColors.background,
       colorScheme: const ColorScheme.dark(
         primary: AcrColors.cyan,
