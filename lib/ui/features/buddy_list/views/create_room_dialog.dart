@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/acr_theme.dart';
+
 class CreateRoomDialog extends StatefulWidget {
   const CreateRoomDialog({super.key, required this.onCreate});
 
@@ -8,7 +10,8 @@ class CreateRoomDialog extends StatefulWidget {
     required String description,
     required String topic,
     required bool isPrivate,
-  }) onCreate;
+  })
+  onCreate;
 
   @override
   State<CreateRoomDialog> createState() => _CreateRoomDialogState();
@@ -52,19 +55,19 @@ class _CreateRoomDialogState extends State<CreateRoomDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: const Color(0xFF07080E),
+      backgroundColor: AcrColors.surface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: const BorderSide(color: Color(0xFF1E293B)),
+        side: const BorderSide(color: AcrColors.cardBorder),
       ),
       title: const Row(
         children: [
-          Icon(Icons.tag, color: Color(0xFF06B6D4), size: 20),
+          Icon(Icons.tag, color: AcrColors.zyphraOrange, size: 20),
           SizedBox(width: 8),
           Text(
             'Create Deliberation Room',
             style: TextStyle(
-              color: Colors.white,
+              color: AcrColors.textPrimary,
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
@@ -78,80 +81,100 @@ class _CreateRoomDialogState extends State<CreateRoomDialog> {
           children: [
             const Text(
               'Room Name',
-              style: TextStyle(color: Color(0xFF94A3B8), fontSize: 12),
+              style: TextStyle(color: AcrColors.textSecondary, fontSize: 12),
             ),
             const SizedBox(height: 4),
             TextField(
               controller: _nameController,
-              style: const TextStyle(color: Colors.white, fontSize: 13),
+              style: const TextStyle(
+                color: AcrColors.textPrimary,
+                fontSize: 13,
+              ),
               decoration: InputDecoration(
                 hintText: 'e.g. Canary Deployment Floor',
-                hintStyle: const TextStyle(color: Color(0xFF475569)),
+                hintStyle: const TextStyle(color: AcrColors.textMuted),
                 filled: true,
-                fillColor: const Color(0xFF0B0F19),
+                fillColor: AcrColors.cardOverlay,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(color: Color(0xFF1E293B)),
+                  borderSide: const BorderSide(color: AcrColors.cardBorder),
                 ),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 10,
+                ),
               ),
             ),
             const SizedBox(height: 12),
             const Text(
               'Topic',
-              style: TextStyle(color: Color(0xFF94A3B8), fontSize: 12),
+              style: TextStyle(color: AcrColors.textSecondary, fontSize: 12),
             ),
             const SizedBox(height: 4),
             TextField(
               controller: _topicController,
-              style: const TextStyle(color: Colors.white, fontSize: 13),
+              style: const TextStyle(
+                color: AcrColors.textPrimary,
+                fontSize: 13,
+              ),
               decoration: InputDecoration(
                 hintText: 'e.g. W3C DID • AST Diff Verification',
-                hintStyle: const TextStyle(color: Color(0xFF475569)),
+                hintStyle: const TextStyle(color: AcrColors.textMuted),
                 filled: true,
-                fillColor: const Color(0xFF0B0F19),
+                fillColor: AcrColors.cardOverlay,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(color: Color(0xFF1E293B)),
+                  borderSide: const BorderSide(color: AcrColors.cardBorder),
                 ),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 10,
+                ),
               ),
             ),
             const SizedBox(height: 12),
             const Text(
               'Description',
-              style: TextStyle(color: Color(0xFF94A3B8), fontSize: 12),
+              style: TextStyle(color: AcrColors.textSecondary, fontSize: 12),
             ),
             const SizedBox(height: 4),
             TextField(
               controller: _descController,
               maxLines: 2,
-              style: const TextStyle(color: Colors.white, fontSize: 13),
+              style: const TextStyle(
+                color: AcrColors.textPrimary,
+                fontSize: 13,
+              ),
               decoration: InputDecoration(
                 hintText: 'Deliberation scope and tool governance rules...',
-                hintStyle: const TextStyle(color: Color(0xFF475569)),
+                hintStyle: const TextStyle(color: AcrColors.textMuted),
                 filled: true,
-                fillColor: const Color(0xFF0B0F19),
+                fillColor: AcrColors.cardOverlay,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(color: Color(0xFF1E293B)),
+                  borderSide: const BorderSide(color: AcrColors.cardBorder),
                 ),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 10,
+                ),
               ),
             ),
             const SizedBox(height: 16),
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: const Color(0xFF0B0F19),
+                color: AcrColors.cardOverlay,
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: const Color(0xFF1E293B)),
+                border: Border.all(color: AcrColors.subtleBorder),
               ),
               child: Row(
                 children: [
                   Icon(
                     _isPrivate ? Icons.lock : Icons.shield_outlined,
-                    color: _isPrivate ? Colors.amber : const Color(0xFF06B6D4),
+                    color: _isPrivate
+                        ? AcrColors.amber
+                        : AcrColors.zyphraOrange,
                     size: 18,
                   ),
                   const SizedBox(width: 8),
@@ -161,11 +184,18 @@ class _CreateRoomDialogState extends State<CreateRoomDialog> {
                       children: [
                         Text(
                           'Private Channel (ACL)',
-                          style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            color: AcrColors.textPrimary,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         Text(
                           'Only invited participants can view/send',
-                          style: TextStyle(color: Color(0xFF64748B), fontSize: 10),
+                          style: TextStyle(
+                            color: AcrColors.textMuted,
+                            fontSize: 10,
+                          ),
                         ),
                       ],
                     ),
@@ -173,7 +203,7 @@ class _CreateRoomDialogState extends State<CreateRoomDialog> {
                   Switch(
                     value: _isPrivate,
                     onChanged: (val) => setState(() => _isPrivate = val),
-                    activeThumbColor: Colors.amber,
+                    activeThumbColor: AcrColors.zyphraOrange,
                   ),
                 ],
               ),
@@ -184,14 +214,19 @@ class _CreateRoomDialogState extends State<CreateRoomDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel', style: TextStyle(color: Color(0xFF94A3B8))),
+          child: const Text(
+            'Cancel',
+            style: TextStyle(color: AcrColors.textSecondary),
+          ),
         ),
         ElevatedButton(
           onPressed: _isSubmitting ? null : _submit,
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF06B6D4),
-            foregroundColor: Colors.black,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            backgroundColor: AcrColors.zyphraOrange,
+            foregroundColor: AcrColors.textOnAccent,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
           ),
           child: Text(
             _isSubmitting ? 'Creating...' : 'Create Room',

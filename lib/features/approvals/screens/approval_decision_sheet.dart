@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../ui/core/theme/acr_theme.dart';
+
 /// Biometric-Secured Approval Decision Sheet (RFC-0012)
 ///
 /// Presents a high-stakes ActionProposal to a human operator, requiring explicit
@@ -46,113 +48,134 @@ class _ApprovalDecisionSheetState extends State<ApprovalDecisionSheet> {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: const BoxDecoration(
-        color: Color(0xFF0D0D11),
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        color: AcrColors.surface,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        border: Border(top: BorderSide(color: AcrColors.subtleBorder)),
       ),
       child: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Icon(Icons.security, color: Color(0xFFFF5500), size: 24),
-                const SizedBox(width: 8),
-                const Text(
-                  'CRITICAL APPROVAL GATE',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.2,
-                    fontSize: 14,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(
+                    Icons.security,
+                    color: AcrColors.zyphraOrange,
+                    size: 24,
                   ),
-                ),
-                const Spacer(),
-                IconButton(
-                  icon: const Icon(Icons.close, color: Colors.white54),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Action: ${widget.kind.toUpperCase()}',
-              style: const TextStyle(
-                color: Color(0xFFFF5500),
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
+                  const SizedBox(width: 8),
+                  const Text(
+                    'CRITICAL APPROVAL GATE',
+                    style: TextStyle(
+                      fontFamily: AcrTypography.monoFontFamily,
+                      fontFamilyFallback: AcrTypography.monoFallback,
+                      color: AcrColors.textPrimary,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.2,
+                      fontSize: 14,
+                    ),
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    tooltip: 'Close approval sheet',
+                    icon: const Icon(Icons.close, color: AcrColors.textMuted),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              widget.summary,
-              style: const TextStyle(color: Colors.white70, fontSize: 14),
-            ),
-            const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.black26,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.white12),
-              ),
-              child: Text(
-                'Hash: ${widget.actionId}',
+              const SizedBox(height: 16),
+              Text(
+                'Action: ${widget.kind.toUpperCase()}',
                 style: const TextStyle(
-                  color: Colors.white54,
-                  fontFamily: 'monospace',
-                  fontSize: 12,
+                  color: AcrColors.solarTint,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
                 ),
               ),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: _reasonController,
-              style: const TextStyle(color: Colors.white),
-              decoration: const InputDecoration(
-                labelText: 'Operator Rationale (Optional)',
-                labelStyle: TextStyle(color: Colors.white54),
-                border: OutlineInputBorder(),
+              const SizedBox(height: 8),
+              Text(
+                widget.summary,
+                style: const TextStyle(
+                  color: AcrColors.textSecondary,
+                  fontSize: 14,
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.redAccent,
-                      side: const BorderSide(color: Colors.redAccent),
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                    ),
-                    onPressed: () {
-                      widget.onDecision(false, _reasonController.text);
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text('VETO / REJECT'),
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AcrColors.background,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: AcrColors.subtleBorder),
+                ),
+                child: Text(
+                  'Hash: ${widget.actionId}',
+                  style: const TextStyle(
+                    color: AcrColors.textMuted,
+                    fontFamily: AcrTypography.monoFontFamily,
+                    fontFamilyFallback: AcrTypography.monoFallback,
+                    fontSize: 12,
                   ),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFF5500),
-                      foregroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                    ),
-                    onPressed: () async {
-                      if (!_biometricVerified) {
-                        await _simulateBiometricAuth();
-                      }
-                      widget.onDecision(true, _reasonController.text);
-                      if (context.mounted) Navigator.of(context).pop();
-                    },
-                    child: Text(_biometricVerified ? 'AUTHORIZE' : 'CONFIRM (BIOMETRIC)'),
-                  ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _reasonController,
+                style: const TextStyle(color: AcrColors.textPrimary),
+                decoration: const InputDecoration(
+                  labelText: 'Operator Rationale (Optional)',
+                  labelStyle: TextStyle(color: AcrColors.textMuted),
+                  border: OutlineInputBorder(),
                 ),
-              ],
-            ),
-          ],
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        minimumSize: const Size(44, 44),
+                        foregroundColor: AcrColors.rose,
+                        side: const BorderSide(color: AcrColors.rose),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      onPressed: () {
+                        widget.onDecision(false, _reasonController.text);
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('VETO / REJECT'),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(44, 44),
+                        backgroundColor: AcrColors.zyphraOrange,
+                        foregroundColor: AcrColors.textOnAccent,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      onPressed: () async {
+                        if (!_biometricVerified) {
+                          await _simulateBiometricAuth();
+                        }
+                        widget.onDecision(true, _reasonController.text);
+                        if (context.mounted) Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        _biometricVerified
+                            ? 'AUTHORIZE'
+                            : 'CONFIRM (BIOMETRIC)',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -22,15 +22,23 @@ void main() {
   final gatewayService = AcrGatewayService();
   final agentRepository = AgentRepository(gatewayService: gatewayService);
   final roomRepository = RoomRepository(gatewayService: gatewayService);
-  final governanceRepository = GovernanceRepository(gatewayService: gatewayService);
+  final governanceRepository = GovernanceRepository(
+    gatewayService: gatewayService,
+  );
 
   // 2. Domain Layer: Use Cases
   final sendMessageUseCase = SendMessageUseCase(repository: roomRepository);
-  final resolveEscalationUseCase = ResolveEscalationUseCase(repository: governanceRepository);
-  final getAuditTrailUseCase = GetAuditTrailUseCase(repository: governanceRepository);
+  final resolveEscalationUseCase = ResolveEscalationUseCase(
+    repository: governanceRepository,
+  );
+  final getAuditTrailUseCase = GetAuditTrailUseCase(
+    repository: governanceRepository,
+  );
 
   // 3. UI Layer: ViewModels
-  final buddyListViewModel = BuddyListViewModel(agentRepository: agentRepository);
+  final buddyListViewModel = BuddyListViewModel(
+    agentRepository: agentRepository,
+  );
   final roomChatViewModel = RoomChatViewModel(
     roomRepository: roomRepository,
     sendMessageUseCase: sendMessageUseCase,
@@ -39,7 +47,9 @@ void main() {
     governanceRepository: governanceRepository,
     resolveEscalationUseCase: resolveEscalationUseCase,
   );
-  final auditViewModel = AuditViewModel(getAuditTrailUseCase: getAuditTrailUseCase);
+  final auditViewModel = AuditViewModel(
+    getAuditTrailUseCase: getAuditTrailUseCase,
+  );
 
   // Initial Load
   buddyListViewModel.loadAgents();
@@ -70,7 +80,7 @@ void main() {
 class AcrApp extends StatelessWidget {
   const AcrApp({super.key, required this.router});
 
-  final dynamic router;
+  final RouterConfig<Object> router;
 
   @override
   Widget build(BuildContext context) {

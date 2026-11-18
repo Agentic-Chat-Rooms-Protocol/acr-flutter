@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../domain/models/mcp_tool_call.dart';
 import '../../../core/theme/acr_theme.dart';
 
@@ -15,29 +16,36 @@ class McpToolCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AcrColors.surface,
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: AcrColors.cyan.withValues(alpha: 0.25)),
+        border: Border.all(
+          color: AcrColors.zyphraOrange.withValues(alpha: 0.3),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const Icon(Icons.terminal_outlined, color: AcrColors.cyan, size: 14),
+              const Icon(
+                Icons.terminal_outlined,
+                color: AcrColors.solarTint,
+                size: 14,
+              ),
               const SizedBox(width: 6),
               Text(
                 toolCall.toolName,
                 style: const TextStyle(
-                  color: AcrColors.cyan,
+                  color: AcrColors.solarTint,
                   fontSize: 11,
                   fontWeight: FontWeight.bold,
-                  fontFamily: 'monospace',
+                  fontFamily: AcrTypography.monoFontFamily,
+                  fontFamilyFallback: AcrTypography.monoFallback,
                 ),
               ),
               const Spacer(),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
                 decoration: BoxDecoration(
-                  color: AcrColors.card,
+                  color: AcrColors.cardOverlay,
                   borderRadius: BorderRadius.circular(4),
                 ),
                 child: Text(
@@ -46,7 +54,8 @@ class McpToolCard extends StatelessWidget {
                     color: AcrColors.emerald,
                     fontSize: 10,
                     fontWeight: FontWeight.bold,
-                    fontFamily: 'monospace',
+                    fontFamily: AcrTypography.monoFontFamily,
+                    fontFamilyFallback: AcrTypography.monoFallback,
                   ),
                 ),
               ),
@@ -66,7 +75,8 @@ class McpToolCard extends StatelessWidget {
                 style: const TextStyle(
                   color: AcrColors.textSecondary,
                   fontSize: 11,
-                  fontFamily: 'monospace',
+                  fontFamily: AcrTypography.monoFontFamily,
+                  fontFamilyFallback: AcrTypography.monoFallback,
                 ),
               ),
             ),

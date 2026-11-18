@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import '../../../../domain/models/proposal.dart';
+import '../../../core/theme/acr_theme.dart';
 
 class ProposalsBannerView extends StatelessWidget {
   const ProposalsBannerView({
@@ -11,73 +13,19 @@ class ProposalsBannerView extends StatelessWidget {
 
   final List<Proposal> proposals;
   final String currentVoterDid;
-  final Future<void> Function(String proposalId, String choice, {String? rationale}) onVote;
+  final Future<void> Function(
+    String proposalId,
+    String choice, {
+    String? rationale,
+  })
+  onVote;
 
   void _promptDissent(BuildContext context, Proposal prop) {
-    final controller = TextEditingController();
-    showDialog(
+    showDialog<void>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xFF07080E),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-          side: const BorderSide(color: Colors.amber),
-        ),
-        title: const Row(
-          children: [
-            Icon(Icons.warning_amber_rounded, color: Colors.amber, size: 20),
-            SizedBox(width: 8),
-            Text(
-              'Preserve Dissent Rationale',
-              style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Dissenting arguments are anchored permanently into the TLA+ verified SHA-256 state chain.',
-              style: TextStyle(color: Color(0xFF94A3B8), fontSize: 11),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: controller,
-              maxLines: 3,
-              style: const TextStyle(color: Colors.white, fontSize: 12),
-              decoration: InputDecoration(
-                hintText: 'Enter architectural or safety justification for dissent...',
-                hintStyle: const TextStyle(color: Color(0xFF475569)),
-                filled: true,
-                fillColor: const Color(0xFF0B0F19),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  borderSide: const BorderSide(color: Color(0xFF1E293B)),
-                ),
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('Cancel', style: TextStyle(color: Color(0xFF94A3B8))),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              final text = controller.text.trim();
-              if (text.isEmpty) return;
-              Navigator.of(ctx).pop();
-              await onVote(prop.id, 'DISSENT', rationale: text);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.amber,
-              foregroundColor: Colors.black,
-            ),
-            child: const Text('Anchor Dissent', style: TextStyle(fontWeight: FontWeight.bold)),
-          ),
-        ],
+      builder: (ctx) => _DissentRationaleDialog(
+        onSubmit: (rationale) =>
+            onVote(prop.id, 'DISSENT', rationale: rationale),
       ),
     );
   }
@@ -104,9 +52,9 @@ class ProposalsBannerView extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFF0B0F19),
+        color: AcrColors.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.amber.withValues(alpha: 0.3)),
+        border: Border.all(color: AcrColors.amber.withValues(alpha: 0.35)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,22 +64,29 @@ class ProposalsBannerView extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
-                  color: Colors.amber.withValues(alpha: 0.15),
+                  color: AcrColors.amber.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(4),
-                  border: Border.all(color: Colors.amber.withValues(alpha: 0.3)),
+                  border: Border.all(
+                    color: AcrColors.amber.withValues(alpha: 0.35),
+                  ),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.how_to_vote, color: Colors.amber, size: 12),
+                    const Icon(
+                      Icons.how_to_vote,
+                      color: AcrColors.amber,
+                      size: 12,
+                    ),
                     const SizedBox(width: 4),
                     Text(
                       prop.id.toUpperCase(),
                       style: const TextStyle(
-                        color: Colors.amber,
+                        color: AcrColors.amber,
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
-                        fontFamily: 'monospace',
+                        fontFamily: AcrTypography.monoFontFamily,
+                        fontFamilyFallback: AcrTypography.monoFallback,
                       ),
                     ),
                   ],
@@ -142,7 +97,7 @@ class ProposalsBannerView extends StatelessWidget {
                 child: Text(
                   prop.title,
                   style: const TextStyle(
-                    color: Colors.white,
+                    color: AcrColors.textPrimary,
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
                   ),
@@ -151,14 +106,22 @@ class ProposalsBannerView extends StatelessWidget {
               ),
               Text(
                 '${prop.votes.length} Votes',
-                style: const TextStyle(color: Color(0xFF64748B), fontSize: 10, fontFamily: 'monospace'),
+                style: const TextStyle(
+                  color: AcrColors.textMuted,
+                  fontSize: 10,
+                  fontFamily: AcrTypography.monoFontFamily,
+                  fontFamilyFallback: AcrTypography.monoFallback,
+                ),
               ),
             ],
           ),
           const SizedBox(height: 6),
           Text(
             prop.description,
-            style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 11),
+            style: const TextStyle(
+              color: AcrColors.textSecondary,
+              fontSize: 11,
+            ),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
@@ -167,11 +130,35 @@ class ProposalsBannerView extends StatelessWidget {
           // Tally summary
           Row(
             children: [
-              Text('Approve: $approves', style: const TextStyle(color: Color(0xFF10B981), fontSize: 10, fontFamily: 'monospace')),
+              Text(
+                'Approve: $approves',
+                style: const TextStyle(
+                  color: AcrColors.emerald,
+                  fontSize: 10,
+                  fontFamily: AcrTypography.monoFontFamily,
+                  fontFamilyFallback: AcrTypography.monoFallback,
+                ),
+              ),
               const SizedBox(width: 12),
-              Text('Reject: $rejects', style: const TextStyle(color: Color(0xFFF43F5E), fontSize: 10, fontFamily: 'monospace')),
+              Text(
+                'Reject: $rejects',
+                style: const TextStyle(
+                  color: AcrColors.rose,
+                  fontSize: 10,
+                  fontFamily: AcrTypography.monoFontFamily,
+                  fontFamilyFallback: AcrTypography.monoFallback,
+                ),
+              ),
               const SizedBox(width: 12),
-              Text('Dissent: $dissents', style: const TextStyle(color: Colors.amber, fontSize: 10, fontFamily: 'monospace')),
+              Text(
+                'Dissent: $dissents',
+                style: const TextStyle(
+                  color: AcrColors.amber,
+                  fontSize: 10,
+                  fontFamily: AcrTypography.monoFontFamily,
+                  fontFamilyFallback: AcrTypography.monoFallback,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 8),
@@ -181,17 +168,27 @@ class ProposalsBannerView extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
               decoration: BoxDecoration(
-                color: const Color(0xFF06B6D4).withValues(alpha: 0.1),
+                color: AcrColors.zyphraOrange.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(6),
-                border: Border.all(color: const Color(0xFF06B6D4).withValues(alpha: 0.3)),
+                border: Border.all(
+                  color: AcrColors.zyphraOrange.withValues(alpha: 0.35),
+                ),
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.check_circle_outline, color: Color(0xFF06B6D4), size: 14),
+                  const Icon(
+                    Icons.check_circle_outline,
+                    color: AcrColors.solarTint,
+                    size: 14,
+                  ),
                   const SizedBox(width: 6),
                   Text(
                     'Your ballot recorded: $userVote',
-                    style: const TextStyle(color: Color(0xFF06B6D4), fontSize: 11, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      color: AcrColors.solarTint,
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ],
               ),
@@ -203,11 +200,14 @@ class ProposalsBannerView extends StatelessWidget {
                   child: OutlinedButton(
                     onPressed: () => onVote(prop.id, 'APPROVE'),
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: const Color(0xFF10B981),
-                      side: const BorderSide(color: Color(0xFF10B981)),
-                      padding: const EdgeInsets.symmetric(vertical: 6),
+                      foregroundColor: AcrColors.emerald,
+                      side: const BorderSide(color: AcrColors.emerald),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                     ),
-                    child: const Text('Approve', style: TextStyle(fontSize: 11)),
+                    child: const Text(
+                      'Approve',
+                      style: TextStyle(fontSize: 11),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -215,9 +215,9 @@ class ProposalsBannerView extends StatelessWidget {
                   child: OutlinedButton(
                     onPressed: () => onVote(prop.id, 'REJECT'),
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: const Color(0xFFF43F5E),
-                      side: const BorderSide(color: Color(0xFFF43F5E)),
-                      padding: const EdgeInsets.symmetric(vertical: 6),
+                      foregroundColor: AcrColors.rose,
+                      side: const BorderSide(color: AcrColors.rose),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                     ),
                     child: const Text('Reject', style: TextStyle(fontSize: 11)),
                   ),
@@ -227,17 +227,119 @@ class ProposalsBannerView extends StatelessWidget {
                   child: OutlinedButton(
                     onPressed: () => _promptDissent(context, prop),
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.amber,
-                      side: const BorderSide(color: Colors.amber),
-                      padding: const EdgeInsets.symmetric(vertical: 6),
+                      foregroundColor: AcrColors.amber,
+                      side: const BorderSide(color: AcrColors.amber),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                     ),
-                    child: const Text('Dissent...', style: TextStyle(fontSize: 11)),
+                    child: const Text(
+                      'Dissent...',
+                      style: TextStyle(fontSize: 11),
+                    ),
                   ),
                 ),
               ],
             ),
         ],
       ),
+    );
+  }
+}
+
+class _DissentRationaleDialog extends StatefulWidget {
+  const _DissentRationaleDialog({required this.onSubmit});
+
+  final Future<void> Function(String rationale) onSubmit;
+
+  @override
+  State<_DissentRationaleDialog> createState() =>
+      _DissentRationaleDialogState();
+}
+
+class _DissentRationaleDialogState extends State<_DissentRationaleDialog> {
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: AcrColors.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: const BorderSide(color: AcrColors.amber),
+      ),
+      title: const Row(
+        children: [
+          Icon(Icons.warning_amber_rounded, color: AcrColors.amber, size: 20),
+          SizedBox(width: 8),
+          Flexible(
+            child: Text(
+              'Preserve Dissent Rationale',
+              style: TextStyle(
+                color: AcrColors.textPrimary,
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Dissenting arguments are anchored permanently into the TLA+ verified SHA-256 state chain.',
+            style: TextStyle(color: AcrColors.textSecondary, fontSize: 11),
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            controller: _controller,
+            maxLines: 3,
+            style: const TextStyle(color: AcrColors.textPrimary, fontSize: 12),
+            decoration: InputDecoration(
+              hintText:
+                  'Enter architectural or safety justification for dissent...',
+              hintStyle: const TextStyle(color: AcrColors.textMuted),
+              filled: true,
+              fillColor: AcrColors.cardOverlay,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: const BorderSide(color: AcrColors.cardBorder),
+              ),
+            ),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text(
+            'Cancel',
+            style: TextStyle(color: AcrColors.textSecondary),
+          ),
+        ),
+        ElevatedButton(
+          onPressed: () async {
+            final text = _controller.text.trim();
+            if (text.isEmpty) return;
+            Navigator.of(context).pop();
+            await widget.onSubmit(text);
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AcrColors.amber,
+            foregroundColor: AcrColors.textOnAccent,
+          ),
+          child: const Text(
+            'Anchor Dissent',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+      ],
     );
   }
 }

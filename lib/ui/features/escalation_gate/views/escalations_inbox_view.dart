@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import '../../../core/theme/acr_theme.dart';
 import '../view_models/escalation_view_model.dart';
 import 'escalation_dialog.dart';
@@ -27,18 +28,29 @@ class EscalationsInboxView extends StatelessWidget {
             children: [
               // Header
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 decoration: const BoxDecoration(
                   color: AcrColors.surface,
-                  border: Border(bottom: BorderSide(color: AcrColors.cardBorder)),
+                  border: Border(
+                    bottom: BorderSide(color: AcrColors.subtleBorder),
+                  ),
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.shield_outlined, color: AcrColors.amber, size: 20),
+                    const Icon(
+                      Icons.shield_outlined,
+                      color: AcrColors.zyphraOrange,
+                      size: 20,
+                    ),
                     const SizedBox(width: 8),
                     const Text(
                       'HUMAN ESCALATION GATES',
                       style: TextStyle(
+                        fontFamily: AcrTypography.monoFontFamily,
+                        fontFamilyFallback: AcrTypography.monoFallback,
                         color: AcrColors.textPrimary,
                         fontSize: 13,
                         fontWeight: FontWeight.bold,
@@ -47,7 +59,10 @@ class EscalationsInboxView extends StatelessWidget {
                     ),
                     const Spacer(),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         color: AcrColors.amber.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(4),
@@ -55,6 +70,8 @@ class EscalationsInboxView extends StatelessWidget {
                       child: Text(
                         '${escalations.length} PENDING SIGN-OFF',
                         style: const TextStyle(
+                          fontFamily: AcrTypography.monoFontFamily,
+                          fontFamilyFallback: AcrTypography.monoFallback,
                           color: AcrColors.amber,
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
@@ -63,8 +80,14 @@ class EscalationsInboxView extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     IconButton(
-                      icon: const Icon(Icons.refresh, color: AcrColors.textSecondary, size: 18),
-                      onPressed: () => viewModel.loadEscalations(forceRefresh: true),
+                      tooltip: 'Refresh escalation gates',
+                      icon: const Icon(
+                        Icons.refresh,
+                        color: AcrColors.textSecondary,
+                        size: 18,
+                      ),
+                      onPressed: () =>
+                          viewModel.loadEscalations(forceRefresh: true),
                     ),
                   ],
                 ),
@@ -73,20 +96,31 @@ class EscalationsInboxView extends StatelessWidget {
               // List
               Expanded(
                 child: escalations.isEmpty
-                    ? Center(
+                    ? const Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(Icons.verified_user_outlined, color: AcrColors.emerald, size: 40),
-                            const SizedBox(height: 12),
-                            const Text(
-                              'All Escalation Gates Clear',
-                              style: TextStyle(color: AcrColors.textPrimary, fontSize: 14, fontWeight: FontWeight.bold),
+                            Icon(
+                              Icons.verified_user_outlined,
+                              color: AcrColors.emerald,
+                              size: 40,
                             ),
-                            const SizedBox(height: 4),
-                            const Text(
-                              'Autonomous agents are operating within designated capability envelopes.',
-                              style: TextStyle(color: AcrColors.textMuted, fontSize: 12),
+                            SizedBox(height: 12),
+                            Text(
+                              'All Escalation Gates Clear',
+                              style: TextStyle(
+                                color: AcrColors.textPrimary,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 4),
+                            Text(
+                              'Agents are operating within designated capability envelopes.',
+                              style: TextStyle(
+                                color: AcrColors.textMuted,
+                                fontSize: 12,
+                              ),
                             ),
                           ],
                         ),
@@ -96,55 +130,98 @@ class EscalationsInboxView extends StatelessWidget {
                         itemCount: escalations.length,
                         itemBuilder: (context, index) {
                           final esc = escalations[index];
-                          final timeStr = DateFormat('HH:mm:ss').format(esc.createdAt);
+                          final timeStr = DateFormat('HH:mm:ss')
+                              .format(esc.createdAt);
 
                           return Container(
                             margin: const EdgeInsets.only(bottom: 12),
                             padding: const EdgeInsets.all(14),
                             decoration: BoxDecoration(
                               color: AcrColors.surface,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: AcrColors.amber.withValues(alpha: 0.4)),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: AcrColors.amber.withValues(alpha: 0.4),
+                              ),
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
                                   children: [
-                                    const Icon(Icons.warning_amber_rounded, color: AcrColors.amber, size: 18),
+                                    const Icon(
+                                      Icons.warning_amber_rounded,
+                                      color: AcrColors.amber,
+                                      size: 18,
+                                    ),
                                     const SizedBox(width: 8),
                                     Text(
                                       esc.agentName,
-                                      style: const TextStyle(color: AcrColors.textPrimary, fontSize: 13, fontWeight: FontWeight.bold),
+                                      style: const TextStyle(
+                                        color: AcrColors.textPrimary,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                     const SizedBox(width: 8),
                                     Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 5,
+                                        vertical: 1,
+                                      ),
                                       decoration: BoxDecoration(
-                                        color: AcrColors.rose.withValues(alpha: 0.15),
+                                        color: AcrColors.rose.withValues(
+                                          alpha: 0.15,
+                                        ),
                                         borderRadius: BorderRadius.circular(4),
                                       ),
                                       child: Text(
                                         esc.riskLevel,
-                                        style: const TextStyle(color: AcrColors.rose, fontSize: 9, fontWeight: FontWeight.bold),
+                                        style: const TextStyle(
+                                          fontFamily:
+                                              AcrTypography.monoFontFamily,
+                                          fontFamilyFallback:
+                                              AcrTypography.monoFallback,
+                                          color: AcrColors.rose,
+                                          fontSize: 9,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
                                     ),
                                     const Spacer(),
                                     Text(
                                       timeStr,
-                                      style: const TextStyle(color: AcrColors.textMuted, fontSize: 11, fontFamily: 'monospace'),
+                                      style: const TextStyle(
+                                        color: AcrColors.textMuted,
+                                        fontSize: 11,
+                                        fontFamily:
+                                            AcrTypography.monoFontFamily,
+                                        fontFamilyFallback:
+                                            AcrTypography.monoFallback,
+                                      ),
                                     ),
                                   ],
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
                                   'Action: ${esc.action}',
-                                  style: const TextStyle(color: AcrColors.cyan, fontSize: 12, fontFamily: 'monospace'),
+                                  style: const TextStyle(
+                                    color: AcrColors.solarTint,
+                                    fontSize: 12,
+                                    fontFamily: AcrTypography.monoFontFamily,
+                                    fontFamilyFallback:
+                                        AcrTypography.monoFallback,
+                                  ),
                                 ),
                                 const SizedBox(height: 6),
                                 Text(
                                   'Requesting DID: ${esc.requestingDid}',
-                                  style: const TextStyle(color: AcrColors.textMuted, fontSize: 10, fontFamily: 'monospace'),
+                                  style: const TextStyle(
+                                    color: AcrColors.textMuted,
+                                    fontSize: 10,
+                                    fontFamily: AcrTypography.monoFontFamily,
+                                    fontFamilyFallback:
+                                        AcrTypography.monoFallback,
+                                  ),
                                 ),
                                 const SizedBox(height: 8),
                                 Container(
@@ -156,7 +233,13 @@ class EscalationsInboxView extends StatelessWidget {
                                   ),
                                   child: Text(
                                     esc.payload,
-                                    style: const TextStyle(color: AcrColors.textSecondary, fontSize: 11, fontFamily: 'monospace'),
+                                    style: const TextStyle(
+                                      color: AcrColors.textSecondary,
+                                      fontSize: 11,
+                                      fontFamily: AcrTypography.monoFontFamily,
+                                      fontFamilyFallback:
+                                          AcrTypography.monoFallback,
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(height: 12),
@@ -173,14 +256,16 @@ class EscalationsInboxView extends StatelessWidget {
                                       },
                                       style: OutlinedButton.styleFrom(
                                         foregroundColor: AcrColors.rose,
-                                        side: const BorderSide(color: AcrColors.rose),
+                                        side: const BorderSide(
+                                          color: AcrColors.rose,
+                                        ),
                                       ),
                                       child: const Text('Reject'),
                                     ),
                                     const SizedBox(width: 8),
                                     ElevatedButton.icon(
                                       onPressed: () {
-                                        showDialog(
+                                        showDialog<void>(
                                           context: context,
                                           builder: (ctx) => EscalationDialog(
                                             escalation: esc,
@@ -194,11 +279,16 @@ class EscalationsInboxView extends StatelessWidget {
                                           ),
                                         );
                                       },
-                                      icon: const Icon(Icons.verified, size: 14),
-                                      label: const Text('Review & Sign (Ed25519)'),
+                                      icon: const Icon(
+                                        Icons.verified,
+                                        size: 14,
+                                      ),
+                                      label: const Text(
+                                        'Review & Sign (Ed25519)',
+                                      ),
                                       style: ElevatedButton.styleFrom(
-                                        backgroundColor: AcrColors.cyan,
-                                        foregroundColor: AcrColors.background,
+                                        backgroundColor: AcrColors.zyphraOrange,
+                                        foregroundColor: AcrColors.textOnAccent,
                                       ),
                                     ),
                                   ],

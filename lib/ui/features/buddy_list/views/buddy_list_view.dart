@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../domain/models/agent.dart';
 import '../../../core/theme/acr_theme.dart';
 import '../../../core/widgets/status_badge.dart';
@@ -15,7 +16,9 @@ class BuddyListView extends StatelessWidget {
       listenable: viewModel,
       builder: (context, _) {
         if (viewModel.isLoading && viewModel.agents.isEmpty) {
-          return const Center(child: CircularProgressIndicator(color: AcrColors.cyan));
+          return const Center(
+            child: CircularProgressIndicator(color: AcrColors.zyphraOrange),
+          );
         }
 
         if (viewModel.error != null && viewModel.agents.isEmpty) {
@@ -23,18 +26,25 @@ class BuddyListView extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.error_outline, color: AcrColors.rose, size: 28),
+                const Icon(
+                  Icons.error_outline,
+                  color: AcrColors.rose,
+                  size: 28,
+                ),
                 const SizedBox(height: 8),
-                Text(
+                const Text(
                   'Connection offline',
-                  style: const TextStyle(color: AcrColors.textSecondary, fontSize: 13),
+                  style: TextStyle(
+                    color: AcrColors.textSecondary,
+                    fontSize: 13,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 ElevatedButton(
                   onPressed: () => viewModel.loadAgents(forceRefresh: true),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AcrColors.card,
-                    foregroundColor: AcrColors.cyan,
+                    backgroundColor: AcrColors.zyphraOrange,
+                    foregroundColor: AcrColors.textOnAccent,
                   ),
                   child: const Text('Retry'),
                 ),
@@ -47,25 +57,37 @@ class BuddyListView extends StatelessWidget {
           width: 280,
           decoration: const BoxDecoration(
             color: AcrColors.surface,
-            border: Border(right: BorderSide(color: AcrColors.cardBorder)),
+            border: Border(right: BorderSide(color: AcrColors.subtleBorder)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // AIM-style Roster Header
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 12,
+                ),
                 decoration: const BoxDecoration(
-                  border: Border(bottom: BorderSide(color: AcrColors.cardBorder)),
+                  border: Border(
+                    bottom: BorderSide(color: AcrColors.subtleBorder),
+                  ),
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.hub_outlined, color: AcrColors.cyan, size: 18),
-                    Expanded(
+                    const Icon(
+                      Icons.hub_outlined,
+                      color: AcrColors.zyphraOrange,
+                      size: 18,
+                    ),
+                    const SizedBox(width: 8),
+                    const Expanded(
                       child: Text(
                         'AGENT BUDDY LIST',
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
+                        style: TextStyle(
+                          fontFamily: AcrTypography.monoFontFamily,
+                          fontFamilyFallback: AcrTypography.monoFallback,
                           color: AcrColors.textPrimary,
                           fontSize: 11,
                           fontWeight: FontWeight.bold,
@@ -74,15 +96,20 @@ class BuddyListView extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
-                        color: AcrColors.cyan.withValues(alpha: 0.1),
+                        color: AcrColors.zyphraOrange.withValues(alpha: 0.14),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
                         '${viewModel.agents.length}',
                         style: const TextStyle(
-                          color: AcrColors.cyan,
+                          fontFamily: AcrTypography.monoFontFamily,
+                          fontFamilyFallback: AcrTypography.monoFallback,
+                          color: AcrColors.solarTint,
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
                         ),
@@ -97,11 +124,21 @@ class BuddyListView extends StatelessWidget {
                 child: ListView(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   children: [
-                    _buildSectionHeader('AUTONOMOUS AGENTS', viewModel.autonomousAgents.length),
-                    ...viewModel.autonomousAgents.map((a) => _buildAgentTile(context, a)),
+                    _buildSectionHeader(
+                      'REGISTERED AGENTS',
+                      viewModel.autonomousAgents.length,
+                    ),
+                    ...viewModel.autonomousAgents.map(
+                      (a) => _buildAgentTile(context, a),
+                    ),
                     const SizedBox(height: 12),
-                    _buildSectionHeader('OPERATOR & SENTINELS', viewModel.humanOperators.length),
-                    ...viewModel.humanOperators.map((a) => _buildAgentTile(context, a)),
+                    _buildSectionHeader(
+                      'OPERATOR & SENTINELS',
+                      viewModel.humanOperators.length,
+                    ),
+                    ...viewModel.humanOperators.map(
+                      (a) => _buildAgentTile(context, a),
+                    ),
                   ],
                 ),
               ),
@@ -120,6 +157,8 @@ class BuddyListView extends StatelessWidget {
           Text(
             title,
             style: const TextStyle(
+              fontFamily: AcrTypography.monoFontFamily,
+              fontFamilyFallback: AcrTypography.monoFallback,
               color: AcrColors.textMuted,
               fontSize: 9,
               fontWeight: FontWeight.bold,
@@ -129,7 +168,12 @@ class BuddyListView extends StatelessWidget {
           const Spacer(),
           Text(
             '$count',
-            style: const TextStyle(color: AcrColors.textMuted, fontSize: 9),
+            style: const TextStyle(
+              fontFamily: AcrTypography.monoFontFamily,
+              fontFamilyFallback: AcrTypography.monoFallback,
+              color: AcrColors.textMuted,
+              fontSize: 9,
+            ),
           ),
         ],
       ),
@@ -137,63 +181,69 @@ class BuddyListView extends StatelessWidget {
   }
 
   Widget _buildAgentTile(BuildContext context, Agent agent) {
-    return InkWell(
-      onTap: () => _showAgentCard(context, agent),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-        child: Row(
-          children: [
-            // Avatar
-            CircleAvatar(
-              radius: 14,
-              backgroundColor: AcrColors.card,
-              child: Text(
-                agent.name.substring(0, 1),
-                style: const TextStyle(
-                  color: AcrColors.cyan,
-                  fontSize: 11,
-                  fontWeight: FontWeight.bold,
+    final initial = agent.name.isNotEmpty ? agent.name.substring(0, 1) : '?';
+    return Semantics(
+      button: true,
+      label: 'Inspect agent ${agent.name}, status ${agent.status.label}',
+      child: InkWell(
+        onTap: () => _showAgentCard(context, agent),
+        child: Container(
+          constraints: const BoxConstraints(minHeight: 44),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          child: Row(
+            children: [
+              // Avatar
+              CircleAvatar(
+                radius: 14,
+                backgroundColor: AcrColors.cardOverlay,
+                child: Text(
+                  initial,
+                  style: const TextStyle(
+                    color: AcrColors.solarTint,
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(width: 10),
-            // Info
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    agent.name,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: AcrColors.textPrimary,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
+              const SizedBox(width: 10),
+              // Info
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      agent.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: AcrColors.textPrimary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  ),
-                  Text(
-                    agent.org,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: AcrColors.textMuted,
-                      fontSize: 10,
+                    Text(
+                      agent.org,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        color: AcrColors.textMuted,
+                        fontSize: 10,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(width: 6),
-            StatusBadge(status: agent.status),
-          ],
+              const SizedBox(width: 6),
+              StatusBadge(status: agent.status),
+            ],
+          ),
         ),
       ),
     );
   }
 
   void _showAgentCard(BuildContext context, Agent agent) {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (ctx) {
         return AlertDialog(
@@ -204,12 +254,20 @@ class BuddyListView extends StatelessWidget {
           ),
           title: Row(
             children: [
-              const Icon(Icons.verified_user_outlined, color: AcrColors.cyan, size: 20),
+              const Icon(
+                Icons.verified_user_outlined,
+                color: AcrColors.zyphraOrange,
+                size: 20,
+              ),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
                   agent.name,
-                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                    color: AcrColors.textPrimary,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],
@@ -218,24 +276,58 @@ class BuddyListView extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('DID: ${agent.did}', style: const TextStyle(color: AcrColors.cyan, fontSize: 11, fontFamily: 'monospace')),
+              Text(
+                'DID: ${agent.did}',
+                style: const TextStyle(
+                  color: AcrColors.solarTint,
+                  fontSize: 11,
+                  fontFamily: AcrTypography.monoFontFamily,
+                  fontFamilyFallback: AcrTypography.monoFallback,
+                ),
+              ),
               const SizedBox(height: 6),
-              Text('Organization: ${agent.org}', style: const TextStyle(color: AcrColors.textSecondary, fontSize: 12)),
+              Text(
+                'Organization: ${agent.org}',
+                style: const TextStyle(
+                  color: AcrColors.textSecondary,
+                  fontSize: 12,
+                ),
+              ),
               const SizedBox(height: 12),
-              const Text('CAPABILITY CREDENTIAL SCOPES:', style: TextStyle(color: AcrColors.textMuted, fontSize: 10, fontWeight: FontWeight.bold)),
+              const Text(
+                'CAPABILITY CREDENTIAL SCOPES:',
+                style: TextStyle(
+                  fontFamily: AcrTypography.monoFontFamily,
+                  fontFamilyFallback: AcrTypography.monoFallback,
+                  color: AcrColors.textMuted,
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               const SizedBox(height: 6),
               Wrap(
                 spacing: 6,
                 runSpacing: 6,
                 children: agent.capabilities.map((c) {
                   return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 6,
+                      vertical: 2,
+                    ),
                     decoration: BoxDecoration(
-                      color: AcrColors.indigo.withValues(alpha: 0.15),
-                      border: Border.all(color: AcrColors.indigo.withValues(alpha: 0.4)),
+                      color: AcrColors.graphite,
+                      border: Border.all(color: AcrColors.cardBorder),
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    child: Text(c, style: const TextStyle(color: AcrColors.textPrimary, fontSize: 10, fontFamily: 'monospace')),
+                    child: Text(
+                      c,
+                      style: const TextStyle(
+                        color: AcrColors.textPrimary,
+                        fontSize: 10,
+                        fontFamily: AcrTypography.monoFontFamily,
+                        fontFamilyFallback: AcrTypography.monoFallback,
+                      ),
+                    ),
                   );
                 }).toList(),
               ),
@@ -244,7 +336,10 @@ class BuddyListView extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(ctx).pop(),
-              child: const Text('Close', style: TextStyle(color: AcrColors.cyan)),
+              child: const Text(
+                'Close',
+                style: TextStyle(color: AcrColors.solarTint),
+              ),
             ),
           ],
         );

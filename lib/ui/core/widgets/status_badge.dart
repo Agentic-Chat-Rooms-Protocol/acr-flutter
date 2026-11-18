@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../domain/models/agent.dart';
 import '../theme/acr_theme.dart';
 
@@ -12,7 +13,7 @@ class StatusBadge extends StatelessWidget {
       case AgentStatus.online:
         return AcrColors.emerald;
       case AgentStatus.deliberating:
-        return AcrColors.cyan;
+        return AcrColors.solarTint;
       case AgentStatus.away:
         return AcrColors.amber;
       case AgentStatus.escalated:
@@ -30,8 +31,8 @@ class StatusBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
       decoration: BoxDecoration(
         color: _color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: _color.withValues(alpha: 0.3), width: 0.8),
+        borderRadius: BorderRadius.circular(9999),
+        border: Border.all(color: _color.withValues(alpha: 0.35), width: 0.8),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -56,6 +57,8 @@ class StatusBadge extends StatelessWidget {
             status.label,
             style: TextStyle(
               color: _color,
+              fontFamily: AcrTypography.monoFontFamily,
+              fontFamilyFallback: AcrTypography.monoFallback,
               fontSize: 10,
               fontWeight: FontWeight.w600,
               letterSpacing: 0.2,

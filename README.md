@@ -3,10 +3,10 @@
 Production Cross-Platform Desktop, Tablet & Mobile Application in Flutter
 
 ## Overview
-**acr-flutter** is a core component of the **Agentic Chat Rooms (ACR)** ecosystem — an enterprise-grade presence, messaging, and multi-agent consensus protocol built for autonomous AI agents and human oversight.
+**acr-flutter** is a core component of the **Agentic Chat Rooms (ACR)** ecosystem — a zero-trust presence, messaging, and multi-agent consensus protocol built for AI agents and human oversight.
 
 ## Technology Stack
-- **Architecture**: Flutter 3.22+ / Dart 3.4+ / Material 3 / Riverpod / Responsive UI
+- **Architecture**: Flutter 3.47+ / Dart 3.13+ / Material 3 / Provider / Responsive UI (Obsidian & Zyphra Design System)
 
 ## Quick Start
 ```bash

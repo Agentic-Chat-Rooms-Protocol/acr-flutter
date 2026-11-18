@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import '../../../core/theme/acr_theme.dart';
 import '../view_models/audit_view_model.dart';
 
@@ -14,7 +15,9 @@ class AuditTimelineView extends StatelessWidget {
       listenable: viewModel,
       builder: (context, _) {
         if (viewModel.isLoading && viewModel.auditLogs.isEmpty) {
-          return const Center(child: CircularProgressIndicator(color: AcrColors.cyan));
+          return const Center(
+            child: CircularProgressIndicator(color: AcrColors.zyphraOrange),
+          );
         }
 
         if (viewModel.auditLogs.isEmpty) {
@@ -22,11 +25,18 @@ class AuditTimelineView extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.history_toggle_off, color: AcrColors.textMuted, size: 36),
+                const Icon(
+                  Icons.history_toggle_off,
+                  color: AcrColors.textMuted,
+                  size: 36,
+                ),
                 const SizedBox(height: 12),
                 const Text(
                   'No Audit State Hashes Recorded',
-                  style: TextStyle(color: AcrColors.textSecondary, fontSize: 13),
+                  style: TextStyle(
+                    color: AcrColors.textSecondary,
+                    fontSize: 13,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 ElevatedButton.icon(
@@ -34,8 +44,8 @@ class AuditTimelineView extends StatelessWidget {
                   icon: const Icon(Icons.refresh, size: 14),
                   label: const Text('Refresh Audit Chain'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AcrColors.card,
-                    foregroundColor: AcrColors.cyan,
+                    backgroundColor: AcrColors.zyphraOrange,
+                    foregroundColor: AcrColors.textOnAccent,
                   ),
                 ),
               ],
@@ -50,46 +60,68 @@ class AuditTimelineView extends StatelessWidget {
             children: [
               // Audit Replay Header
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 decoration: const BoxDecoration(
                   color: AcrColors.surface,
-                  border: Border(bottom: BorderSide(color: AcrColors.cardBorder)),
+                  border: Border(
+                    bottom: BorderSide(color: AcrColors.subtleBorder),
+                  ),
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.account_tree_outlined, color: AcrColors.cyan, size: 18),
+                    const Icon(
+                      Icons.account_tree_outlined,
+                      color: AcrColors.zyphraOrange,
+                      size: 18,
+                    ),
                     const SizedBox(width: 8),
-                    const Text(
-                      'TLA+ VERIFIED AUDIT REPLAY (SHA-256 HASH CHAIN)',
-                      style: TextStyle(
-                        color: AcrColors.textPrimary,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 0.5,
+                    const Expanded(
+                      child: Text(
+                        'TLA+ VERIFIED AUDIT REPLAY (SHA-256 HASH CHAIN)',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontFamily: AcrTypography.monoFontFamily,
+                          fontFamilyFallback: AcrTypography.monoFallback,
+                          color: AcrColors.textPrimary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 0.5,
+                        ),
                       ),
                     ),
-                    const Spacer(),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
-                        color: AcrColors.card,
+                        color: AcrColors.cardOverlay,
                         borderRadius: BorderRadius.circular(4),
-                        border: Border.all(color: AcrColors.cardBorder),
+                        border: Border.all(color: AcrColors.subtleBorder),
                       ),
                       child: Text(
                         '${viewModel.auditLogs.length} BLOCKS',
                         style: const TextStyle(
                           color: AcrColors.emerald,
                           fontSize: 10,
-                          fontFamily: 'monospace',
+                          fontFamily: AcrTypography.monoFontFamily,
+                          fontFamilyFallback: AcrTypography.monoFallback,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                     const SizedBox(width: 8),
                     IconButton(
-                      icon: const Icon(Icons.refresh, color: AcrColors.textSecondary, size: 18),
-                      onPressed: () => viewModel.loadAuditLogs(forceRefresh: true),
+                      icon: const Icon(
+                        Icons.refresh,
+                        color: AcrColors.textSecondary,
+                        size: 18,
+                      ),
+                      onPressed: () =>
+                          viewModel.loadAuditLogs(forceRefresh: true),
                       tooltip: 'Refresh Chain',
                     ),
                   ],
@@ -105,18 +137,19 @@ class AuditTimelineView extends StatelessWidget {
                     margin: const EdgeInsets.only(left: 20),
                     height: 16,
                     width: 2,
-                    color: AcrColors.cyan.withValues(alpha: 0.3),
+                    color: AcrColors.zyphraOrange.withValues(alpha: 0.35),
                   ),
                   itemBuilder: (context, index) {
                     final entry = viewModel.auditLogs[index];
-                    final timeStr = DateFormat('HH:mm:ss.SSS').format(entry.timestamp);
+                    final timeStr = DateFormat('HH:mm:ss.SSS')
+                        .format(entry.timestamp);
 
                     return Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         color: AcrColors.surface,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: AcrColors.cardBorder),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: AcrColors.subtleBorder),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,17 +157,24 @@ class AuditTimelineView extends StatelessWidget {
                           Row(
                             children: [
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 2,
+                                ),
                                 decoration: BoxDecoration(
-                                  color: AcrColors.cyan.withValues(alpha: 0.15),
+                                  color: AcrColors.zyphraOrange.withValues(
+                                    alpha: 0.16,
+                                  ),
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                                 child: Text(
                                   '#${entry.index.toString().padLeft(4, '0')}',
                                   style: const TextStyle(
-                                    color: AcrColors.cyan,
+                                    color: AcrColors.solarTint,
                                     fontSize: 11,
-                                    fontFamily: 'monospace',
+                                    fontFamily: AcrTypography.monoFontFamily,
+                                    fontFamilyFallback:
+                                        AcrTypography.monoFallback,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -154,7 +194,9 @@ class AuditTimelineView extends StatelessWidget {
                                 style: const TextStyle(
                                   color: AcrColors.textMuted,
                                   fontSize: 10,
-                                  fontFamily: 'monospace',
+                                  fontFamily: AcrTypography.monoFontFamily,
+                                  fontFamilyFallback:
+                                      AcrTypography.monoFallback,
                                 ),
                               ),
                             ],
@@ -163,7 +205,10 @@ class AuditTimelineView extends StatelessWidget {
                           if (entry.payloadSummary.isNotEmpty)
                             Text(
                               entry.payloadSummary,
-                              style: const TextStyle(color: AcrColors.textSecondary, fontSize: 11),
+                              style: const TextStyle(
+                                color: AcrColors.textSecondary,
+                                fontSize: 11,
+                              ),
                             ),
                           const SizedBox(height: 8),
                           Container(
@@ -177,11 +222,28 @@ class AuditTimelineView extends StatelessWidget {
                               children: [
                                 Row(
                                   children: [
-                                    const Text('PREV: ', style: TextStyle(color: AcrColors.textMuted, fontSize: 9, fontFamily: 'monospace')),
+                                    const Text(
+                                      'PREV: ',
+                                      style: TextStyle(
+                                        color: AcrColors.textMuted,
+                                        fontSize: 9,
+                                        fontFamily:
+                                            AcrTypography.monoFontFamily,
+                                        fontFamilyFallback:
+                                            AcrTypography.monoFallback,
+                                      ),
+                                    ),
                                     Expanded(
                                       child: Text(
                                         entry.previousHash,
-                                        style: const TextStyle(color: AcrColors.textMuted, fontSize: 9, fontFamily: 'monospace'),
+                                        style: const TextStyle(
+                                          color: AcrColors.textMuted,
+                                          fontSize: 9,
+                                          fontFamily:
+                                              AcrTypography.monoFontFamily,
+                                          fontFamilyFallback:
+                                              AcrTypography.monoFallback,
+                                        ),
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
@@ -190,11 +252,29 @@ class AuditTimelineView extends StatelessWidget {
                                 const SizedBox(height: 2),
                                 Row(
                                   children: [
-                                    const Text('CURR: ', style: TextStyle(color: AcrColors.cyan, fontSize: 9, fontFamily: 'monospace')),
+                                    const Text(
+                                      'CURR: ',
+                                      style: TextStyle(
+                                        color: AcrColors.solarTint,
+                                        fontSize: 9,
+                                        fontFamily:
+                                            AcrTypography.monoFontFamily,
+                                        fontFamilyFallback:
+                                            AcrTypography.monoFallback,
+                                      ),
+                                    ),
                                     Expanded(
                                       child: Text(
                                         entry.stateHash,
-                                        style: const TextStyle(color: AcrColors.cyan, fontSize: 9, fontFamily: 'monospace', fontWeight: FontWeight.bold),
+                                        style: const TextStyle(
+                                          color: AcrColors.solarTint,
+                                          fontSize: 9,
+                                          fontFamily:
+                                              AcrTypography.monoFontFamily,
+                                          fontFamilyFallback:
+                                              AcrTypography.monoFallback,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                     ),

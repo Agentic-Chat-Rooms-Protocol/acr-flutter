@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../../domain/models/escalation.dart';
 import '../../../core/theme/acr_theme.dart';
 
@@ -19,7 +20,7 @@ class EscalationDialog extends StatelessWidget {
       case 'HIGH':
         return AcrColors.amber;
       case 'MEDIUM':
-        return AcrColors.cyan;
+        return AcrColors.solarTint;
       default:
         return AcrColors.textMuted;
     }
@@ -41,6 +42,9 @@ class EscalationDialog extends StatelessWidget {
             child: Text(
               'HUMAN ESCALATION GATE',
               style: TextStyle(
+                fontFamily: AcrTypography.monoFontFamily,
+                fontFamilyFallback: AcrTypography.monoFallback,
+                color: AcrColors.textPrimary,
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
                 letterSpacing: 0.8,
@@ -51,12 +55,14 @@ class EscalationDialog extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
             decoration: BoxDecoration(
               color: _riskColor.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(6),
+              borderRadius: BorderRadius.circular(4),
               border: Border.all(color: _riskColor.withValues(alpha: 0.4)),
             ),
             child: Text(
               escalation.riskLevel,
               style: TextStyle(
+                fontFamily: AcrTypography.monoFontFamily,
+                fontFamilyFallback: AcrTypography.monoFallback,
                 color: _riskColor,
                 fontSize: 10,
                 fontWeight: FontWeight.bold,
@@ -72,15 +78,18 @@ class EscalationDialog extends StatelessWidget {
           children: [
             Text(
               'Agent ${escalation.agentName} requested high-privilege authorization:',
-              style: const TextStyle(color: AcrColors.textSecondary, fontSize: 13),
+              style: const TextStyle(
+                color: AcrColors.textSecondary,
+                fontSize: 13,
+              ),
             ),
             const SizedBox(height: 10),
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: AcrColors.surface,
+                color: AcrColors.cardOverlay,
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: AcrColors.cardBorder),
+                border: Border.all(color: AcrColors.subtleBorder),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,7 +104,8 @@ class EscalationDialog extends StatelessWidget {
                           color: AcrColors.textPrimary,
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
-                          fontFamily: 'monospace',
+                          fontFamily: AcrTypography.monoFontFamily,
+                          fontFamilyFallback: AcrTypography.monoFallback,
                         ),
                       ),
                     ],
@@ -103,7 +113,12 @@ class EscalationDialog extends StatelessWidget {
                   const SizedBox(height: 6),
                   Text(
                     'DID: ${escalation.requestingDid}',
-                    style: const TextStyle(color: AcrColors.textMuted, fontSize: 10, fontFamily: 'monospace'),
+                    style: const TextStyle(
+                      color: AcrColors.textMuted,
+                      fontSize: 10,
+                      fontFamily: AcrTypography.monoFontFamily,
+                      fontFamilyFallback: AcrTypography.monoFallback,
+                    ),
                   ),
                 ],
               ),
@@ -111,7 +126,13 @@ class EscalationDialog extends StatelessWidget {
             const SizedBox(height: 12),
             const Text(
               'PAYLOAD PREVIEW:',
-              style: TextStyle(color: AcrColors.textMuted, fontSize: 10, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontFamily: AcrTypography.monoFontFamily,
+                fontFamilyFallback: AcrTypography.monoFallback,
+                color: AcrColors.textMuted,
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 6),
             Container(
@@ -123,7 +144,12 @@ class EscalationDialog extends StatelessWidget {
               ),
               child: Text(
                 escalation.payload,
-                style: const TextStyle(color: AcrColors.cyan, fontSize: 11, fontFamily: 'monospace'),
+                style: const TextStyle(
+                  color: AcrColors.solarTint,
+                  fontSize: 11,
+                  fontFamily: AcrTypography.monoFontFamily,
+                  fontFamilyFallback: AcrTypography.monoFallback,
+                ),
               ),
             ),
           ],
@@ -145,9 +171,12 @@ class EscalationDialog extends StatelessWidget {
           icon: const Icon(Icons.verified, size: 16),
           label: const Text('Approve & Sign (Ed25519)'),
           style: ElevatedButton.styleFrom(
-            backgroundColor: AcrColors.cyan,
-            foregroundColor: AcrColors.background,
-            textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+            backgroundColor: AcrColors.zyphraOrange,
+            foregroundColor: AcrColors.textOnAccent,
+            textStyle: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 12,
+            ),
           ),
         ),
       ],

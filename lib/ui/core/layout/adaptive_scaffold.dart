@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../features/audit_replay/view_models/audit_view_model.dart';
 import '../../features/buddy_list/view_models/buddy_list_view_model.dart';
 import '../../features/buddy_list/views/buddy_list_view.dart';
@@ -37,7 +38,12 @@ class AdaptiveScaffold extends StatelessWidget {
         final isMobile = constraints.maxWidth < kTabletBreakpoint;
 
         return Scaffold(
-          appBar: _buildAppBar(context, showDrawer: isMobile, isCompact: isMobile),
+          backgroundColor: AcrColors.background,
+          appBar: _buildAppBar(
+            context,
+            showDrawer: isMobile,
+            isCompact: isMobile,
+          ),
           drawer: isMobile
               ? Drawer(
                   backgroundColor: AcrColors.surface,
@@ -45,8 +51,10 @@ class AdaptiveScaffold extends StatelessWidget {
                     child: Column(
                       children: [
                         _buildNavTabs(),
-                        const Divider(color: AcrColors.cardBorder),
-                        Expanded(child: BuddyListView(viewModel: buddyListViewModel)),
+                        const Divider(color: AcrColors.subtleBorder),
+                        Expanded(
+                          child: BuddyListView(viewModel: buddyListViewModel),
+                        ),
                       ],
                     ),
                   ),
@@ -61,7 +69,9 @@ class AdaptiveScaffold extends StatelessWidget {
                   child: Column(
                     children: [
                       _buildNavTabs(),
-                      Expanded(child: BuddyListView(viewModel: buddyListViewModel)),
+                      Expanded(
+                        child: BuddyListView(viewModel: buddyListViewModel),
+                      ),
                     ],
                   ),
                 ),
@@ -94,38 +104,71 @@ class AdaptiveScaffold extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
       decoration: const BoxDecoration(
         color: AcrColors.surface,
-        border: Border(bottom: BorderSide(color: AcrColors.cardBorder)),
+        border: Border(bottom: BorderSide(color: AcrColors.subtleBorder)),
       ),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
           children: navItems.map((item) {
-            final isSelected = currentPath == item.path;
-            return InkWell(
-              onTap: () => onNavigate?.call(item.path),
-              borderRadius: BorderRadius.circular(6),
-              child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 2),
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-                decoration: BoxDecoration(
-                  color: isSelected ? AcrColors.cyan.withValues(alpha: 0.15) : Colors.transparent,
-                  borderRadius: BorderRadius.circular(6),
-                  border: isSelected ? Border.all(color: AcrColors.cyan.withValues(alpha: 0.3)) : null,
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(item.icon, size: 13, color: isSelected ? AcrColors.cyan : AcrColors.textMuted),
-                    const SizedBox(width: 4),
-                    Text(
-                      item.label,
-                      style: TextStyle(
-                        color: isSelected ? AcrColors.cyan : AcrColors.textSecondary,
-                        fontSize: 10,
-                        fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            final isSelected = item.path == '/'
+                ? (currentPath == '/' || currentPath.startsWith('/rooms/'))
+                : currentPath == item.path;
+            return Semantics(
+              button: true,
+              selected: isSelected,
+              label: '${item.label} tab',
+              child: InkWell(
+                onTap: () => onNavigate?.call(item.path),
+                borderRadius: BorderRadius.circular(8),
+                focusColor: AcrColors.zyphraGlow,
+                child: Container(
+                  constraints: const BoxConstraints(
+                    minWidth: 44,
+                    minHeight: 44,
+                  ),
+                  margin: const EdgeInsets.symmetric(horizontal: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? AcrColors.zyphraOrange.withValues(alpha: 0.16)
+                        : Colors.transparent,
+                    borderRadius: BorderRadius.circular(8),
+                    border: isSelected
+                        ? Border.all(
+                            color: AcrColors.zyphraOrange.withValues(
+                              alpha: 0.45,
+                            ),
+                          )
+                        : null,
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        item.icon,
+                        size: 14,
+                        color: isSelected
+                            ? AcrColors.solarTint
+                            : AcrColors.textMuted,
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: 5),
+                      Text(
+                        item.label,
+                        style: TextStyle(
+                          color: isSelected
+                              ? AcrColors.solarTint
+                              : AcrColors.textSecondary,
+                          fontSize: 11,
+                          fontWeight: isSelected
+                              ? FontWeight.bold
+                              : FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );
@@ -142,9 +185,11 @@ class AdaptiveScaffold extends StatelessWidget {
   }) {
     return AppBar(
       titleSpacing: 16,
+      backgroundColor: AcrColors.surface,
       leading: showDrawer
           ? Builder(
               builder: (ctx) => IconButton(
+                tooltip: 'Open navigation drawer',
                 icon: const Icon(Icons.menu, color: AcrColors.textSecondary),
                 onPressed: () => Scaffold.of(ctx).openDrawer(),
               ),
@@ -155,27 +200,44 @@ class AdaptiveScaffold extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
-              color: AcrColors.cyan.withValues(alpha: 0.15),
+              color: AcrColors.zyphraOrange.withValues(alpha: 0.16),
               shape: BoxShape.circle,
             ),
-            child: const Icon(Icons.hub, color: AcrColors.cyan, size: 16),
+            child: const Icon(
+              Icons.hub,
+              color: AcrColors.zyphraOrange,
+              size: 16,
+            ),
           ),
           const SizedBox(width: 8),
           const Text(
             'ACR',
-            style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: -0.5),
+            style: TextStyle(
+              color: AcrColors.textPrimary,
+              fontWeight: FontWeight.bold,
+              letterSpacing: -0.5,
+            ),
           ),
           const SizedBox(width: 6),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
             decoration: BoxDecoration(
-              color: AcrColors.cyan.withValues(alpha: 0.15),
+              color: AcrColors.zyphraOrange.withValues(alpha: 0.16),
               borderRadius: BorderRadius.circular(4),
-              border: Border.all(color: AcrColors.cyan.withValues(alpha: 0.3)),
+              border: Border.all(
+                color: AcrColors.zyphraOrange.withValues(alpha: 0.4),
+              ),
             ),
             child: const Text(
               'PROTOCOL',
-              style: TextStyle(color: AcrColors.cyan, fontSize: 9, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontFamily: AcrTypography.monoFontFamily,
+                fontFamilyFallback: AcrTypography.monoFallback,
+                color: AcrColors.solarTint,
+                fontSize: 9,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 0.8,
+              ),
             ),
           ),
           if (!isCompact) ...[
@@ -184,15 +246,15 @@ class AdaptiveScaffold extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
               decoration: BoxDecoration(
-                color: AcrColors.card,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AcrColors.cardBorder),
+                color: AcrColors.cardOverlay,
+                borderRadius: BorderRadius.circular(9999),
+                border: Border.all(color: AcrColors.subtleBorder),
               ),
               child: Row(
                 children: [
                   Container(
-                    width: 5,
-                    height: 5,
+                    width: 6,
+                    height: 6,
                     decoration: const BoxDecoration(
                       color: AcrColors.emerald,
                       shape: BoxShape.circle,
@@ -201,33 +263,49 @@ class AdaptiveScaffold extends StatelessWidget {
                   const SizedBox(width: 6),
                   const Text(
                     'Mesh: 99.99% (0.38ms)',
-                    style: TextStyle(color: AcrColors.textSecondary, fontSize: 10, fontFamily: 'monospace'),
+                    style: TextStyle(
+                      color: AcrColors.textSecondary,
+                      fontSize: 10,
+                      fontFamily: AcrTypography.monoFontFamily,
+                      fontFamilyFallback: AcrTypography.monoFallback,
+                    ),
                   ),
                 ],
               ),
             ),
             const Spacer(),
             // Operator DID Identity Chip
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: AcrColors.card,
-                borderRadius: BorderRadius.circular(6),
-                border: Border.all(color: AcrColors.cardBorder),
-              ),
-              child: Row(
-                children: [
-                  const Icon(Icons.admin_panel_settings_outlined, color: AcrColors.cyan, size: 14),
-                  const SizedBox(width: 6),
-                  Text(
-                    operatorDid,
-                    style: const TextStyle(
-                      color: AcrColors.textPrimary,
-                      fontSize: 10,
-                      fontFamily: 'monospace',
+            Flexible(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AcrColors.cardOverlay,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: AcrColors.subtleBorder),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.admin_panel_settings_outlined,
+                      color: AcrColors.solarTint,
+                      size: 14,
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 6),
+                    Flexible(
+                      child: Text(
+                        operatorDid,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          color: AcrColors.textPrimary,
+                          fontSize: 10,
+                          fontFamily: AcrTypography.monoFontFamily,
+                          fontFamilyFallback: AcrTypography.monoFallback,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
